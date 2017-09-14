@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mLoadPleaseBtn = (Button) findViewById(R.id.main_load_please_btn);
         mLoadPleaseBtn.setOnClickListener(this);
 
-        mMainPresenter = new MainPresenter(this, null);
+        mMainPresenter = new MainPresenter(this, new DataRepository());
     }
 
     @Override

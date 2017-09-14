@@ -72,7 +72,7 @@ public class MainPresenterTest {
         @Override
         public List<Main> getData() {
             if (mDataFlag == NOT_DATA_EMPTY)
-                return Arrays.asList(new Main(), new Main(), new Main());
+                return Arrays.asList(new Main("Hari"), new Main("Ravi"), new Main("Pa1"));
             else
                 return Collections.emptyList();
         }
