@@ -49,4 +49,11 @@ public class MainPresenterTest {
         mainPresenter.loadData();
         Mockito.verify(mainView).displayNoData();
     }
+
+    @Test
+    public void handleError(){
+        Mockito.when(mainRepository.getData()).thenThrow(new RuntimeException("boom!"));
+        mainPresenter.loadData();
+        Mockito.verify(mainView).displayError();
+    }
 }

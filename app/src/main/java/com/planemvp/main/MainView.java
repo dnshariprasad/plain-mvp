@@ -10,4 +10,6 @@ public interface MainView {
     void displayData(List<Main> mains);
 
     void displayNoData();
+
+    void displayError();
 }

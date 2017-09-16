@@ -16,10 +16,14 @@ public class MainPresenter {
     }
 
     public void loadData() {
-        List<Main> listOfMain = mMainRepository.getData();
-        if (listOfMain.size() == 0)
-            mMainView.displayNoData();
-        else
-            mMainView.displayData(listOfMain);
+        try {
+            List<Main> listOfMain = mMainRepository.getData();
+            if (listOfMain.size() == 0)
+                mMainView.displayNoData();
+            else
+                mMainView.displayData(listOfMain);
+        } catch (Exception e) {
+            mMainView.displayError();
+        }
     }
 }

@@ -43,6 +43,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void displayNoData() {
-        mLoadPleaseBtn.setText("Oops!");
+        mLoadPleaseBtn.setText("No Data!");
+    }
+
+    @Override
+    public void displayError() {
+        toast("Ooops!");
     }
 }
