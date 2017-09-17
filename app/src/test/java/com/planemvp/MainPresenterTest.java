@@ -5,15 +5,12 @@ import com.planemvp.main.MainPresenter;
 import com.planemvp.main.MainRepository;
 import com.planemvp.main.MainView;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 
 import java.util.Arrays;
@@ -29,12 +26,15 @@ public class MainPresenterTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    List<Main> MOCK_DATA = Arrays.asList(new Main("Hari"), new Main("Ravi"), new Main("Pa1"));
+    private List<Main> MOCK_DATA = Arrays.asList(new Main("Hari"), new Main("Ravi"), new Main("Pa1"));
+
     @Mock
     MainView mainView;
+
     @Mock
     MainRepository mainRepository;
-    MainPresenter mainPresenter;
+
+    private MainPresenter mainPresenter;
 
     @Before
     public void setUp() throws Exception {
@@ -50,14 +50,14 @@ public class MainPresenterTest {
 
     @Test
     public void shouldHandleNoData() {
-        Mockito.when(mainRepository.getData()).thenReturn(Single.<List<Main>>just(Collections.EMPTY_LIST));
+        Mockito.when(mainRepository.getData()).thenReturn(Single.just(Collections.EMPTY_LIST));
         mainPresenter.loadData();
         Mockito.verify(mainView).displayNoData();
     }
 
     @Test
     public void handleError() {
-        Mockito.when(mainRepository.getData()).thenReturn(Single.<List<Main>>error(new Throwable("boom!")));
+        Mockito.when(mainRepository.getData()).thenReturn(Single.error(new Throwable("boom!")));
         mainPresenter.loadData();
         Mockito.verify(mainView).displayError();
     }

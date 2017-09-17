@@ -1,9 +1,12 @@
 package com.planemvp.main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableSingleObserver;
 
 /**
  * Created by Hari on 14/09/17.
@@ -12,27 +15,34 @@ import io.reactivex.functions.Consumer;
 public class MainPresenter {
     private final MainView mMainView;
     private final MainRepository mMainRepository;
+    private CompositeDisposable mCompositeDisposable;
 
     public MainPresenter(MainView mMainView, MainRepository mainRepository) {
         this.mMainView = mMainView;
         this.mMainRepository = mainRepository;
+        mCompositeDisposable = new CompositeDisposable();
     }
 
     public void loadData() {
-        mMainRepository.getData()
-                .subscribe(new Consumer<List<Main>>() {
+        mCompositeDisposable.add(mMainRepository.getData()
+                .subscribeWith(new DisposableSingleObserver<List<Main>>() {
                     @Override
-                    public void accept(List<Main> bookList) throws Exception {
-                        if (bookList.isEmpty())
+                    public void onSuccess(List<Main> mains) {
+                        if (mains.isEmpty())
                             mMainView.displayNoData();
                         else
-                            mMainView.displayData(bookList);
+                            mMainView.displayData(mains);
                     }
-                }, new Consumer<Throwable>() {
+
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    public void onError(Throwable e) {
                         mMainView.displayError();
                     }
-                });
+                }));
     }
+
+    public void unsubsidised() {
+        mCompositeDisposable.clear();
+    }
+
 }
