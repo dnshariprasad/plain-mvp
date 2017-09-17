@@ -7,23 +7,28 @@ import com.planemvp.main.MainView;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoRule;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Single;
+
 /**
  * Created by Hari on 14/09/17.
  */
-@RunWith(MockitoJUnitRunner.class)
 public class MainPresenterTest {
-    public static final boolean DATA_EMPTY = true;
-    public static final boolean NOT_DATA_EMPTY = false;
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
+
     List<Main> MOCK_DATA = Arrays.asList(new Main("Hari"), new Main("Ravi"), new Main("Pa1"));
     @Mock
     MainView mainView;
@@ -38,21 +43,21 @@ public class MainPresenterTest {
 
     @Test
     public void shouldPassDataToView() {
-        Mockito.when(mainRepository.getData()).thenReturn(MOCK_DATA);
+        Mockito.when(mainRepository.getData()).thenReturn(Single.just(MOCK_DATA));
         mainPresenter.loadData();
         Mockito.verify(mainView).displayData(MOCK_DATA);
     }
 
     @Test
     public void shouldHandleNoData() {
-        Mockito.when(mainRepository.getData()).thenReturn(Collections.EMPTY_LIST);
+        Mockito.when(mainRepository.getData()).thenReturn(Single.<List<Main>>just(Collections.EMPTY_LIST));
         mainPresenter.loadData();
         Mockito.verify(mainView).displayNoData();
     }
 
     @Test
-    public void handleError(){
-        Mockito.when(mainRepository.getData()).thenThrow(new RuntimeException("boom!"));
+    public void handleError() {
+        Mockito.when(mainRepository.getData()).thenReturn(Single.<List<Main>>error(new Throwable("boom!")));
         mainPresenter.loadData();
         Mockito.verify(mainView).displayError();
     }

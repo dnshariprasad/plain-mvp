@@ -38,7 +38,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void displayData(List<Main> mains) {
-        mLoadPleaseBtn.setText("Done.");
+        mLoadPleaseBtn.setText("Great I got " + mains.size());
     }
 
     @Override
@@ -48,6 +48,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void displayError() {
-        toast("Ooops!");
+        toast("Oops!");
     }
 }

@@ -2,6 +2,9 @@ package com.planemvp.main;
 
 import java.util.List;
 
+import io.reactivex.Single;
+import io.reactivex.functions.Consumer;
+
 /**
  * Created by Hari on 14/09/17.
  */
@@ -16,14 +19,20 @@ public class MainPresenter {
     }
 
     public void loadData() {
-        try {
-            List<Main> listOfMain = mMainRepository.getData();
-            if (listOfMain.size() == 0)
-                mMainView.displayNoData();
-            else
-                mMainView.displayData(listOfMain);
-        } catch (Exception e) {
-            mMainView.displayError();
-        }
+        mMainRepository.getData()
+                .subscribe(new Consumer<List<Main>>() {
+                    @Override
+                    public void accept(List<Main> bookList) throws Exception {
+                        if (bookList.isEmpty())
+                            mMainView.displayNoData();
+                        else
+                            mMainView.displayData(bookList);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mMainView.displayError();
+                    }
+                });
     }
 }
