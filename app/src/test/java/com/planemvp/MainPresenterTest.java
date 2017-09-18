@@ -5,6 +5,7 @@ import com.planemvp.main.MainPresenter;
 import com.planemvp.main.MainRepository;
 import com.planemvp.main.MainView;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Hari on 14/09/17.
@@ -38,7 +41,13 @@ public class MainPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        mainPresenter = new MainPresenter(mainView, mainRepository);
+        mainPresenter = new MainPresenter(mainView, mainRepository, Schedulers.trampoline());
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+    }
+
+    @After
+    public void cleanUp() {
+        RxJavaPlugins.reset();
     }
 
     @Test
@@ -49,14 +58,15 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void shouldHandleNoData() {
+    public void shouldHandleNoData() throws InterruptedException {
         Mockito.when(mainRepository.getData()).thenReturn(Single.just(Collections.EMPTY_LIST));
         mainPresenter.loadData();
+//        Thread.sleep(1000); // get rid of it
         Mockito.verify(mainView).displayNoData();
     }
 
     @Test
-    public void handleError() {
+    public void handleError() throws InterruptedException {
         Mockito.when(mainRepository.getData()).thenReturn(Single.error(new Throwable("boom!")));
         mainPresenter.loadData();
         Mockito.verify(mainView).displayError();

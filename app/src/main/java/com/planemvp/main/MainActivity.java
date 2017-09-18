@@ -9,6 +9,9 @@ import com.planemvp.app.BaseActivity;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by Hari on 14/09/17.
  */
@@ -20,11 +23,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mLoadPleaseBtn = (Button) findViewById(R.id.main_load_please_btn);
         mLoadPleaseBtn.setOnClickListener(this);
-
-        mMainPresenter = new MainPresenter(this, new DataRepository());
+        mMainPresenter = new MainPresenter(this, new DataRepository(), AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -44,7 +45,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void displayData(List<Main> mains) {
-        mLoadPleaseBtn.setText("Great I got " + mains.size());
+        mLoadPleaseBtn.setText("Great, I got " + mains.size());
     }
 
     @Override
