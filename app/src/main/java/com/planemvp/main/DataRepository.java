@@ -10,6 +10,9 @@ import io.reactivex.Single;
  */
 
 public class DataRepository implements MainRepository {
+    public DataRepository() {
+    }
+
     @Override
     public Single<List<Main>> getData() {
         try {

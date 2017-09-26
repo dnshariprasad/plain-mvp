@@ -61,7 +61,6 @@ public class MainPresenterTest {
     public void shouldHandleNoData() throws InterruptedException {
         Mockito.when(mainRepository.getData()).thenReturn(Single.just(Collections.EMPTY_LIST));
         mainPresenter.loadData();
-//        Thread.sleep(1000); // get rid of it
         Mockito.verify(mainView).displayNoData();
     }
 

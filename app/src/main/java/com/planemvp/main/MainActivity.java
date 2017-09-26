@@ -5,9 +5,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.planemvp.R;
+import com.planemvp.app.App;
 import com.planemvp.app.BaseActivity;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -16,16 +19,25 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Hari on 14/09/17.
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener, MainView {
-    private MainPresenter mMainPresenter;
+    @Inject
+    public MainRepository mDataRepository;
+    public MainPresenter mMainPresenter;
+
     private Button mLoadPleaseBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((App) getApplication()).getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
         mLoadPleaseBtn = (Button) findViewById(R.id.main_load_please_btn);
         mLoadPleaseBtn.setOnClickListener(this);
-        mMainPresenter = new MainPresenter(this, new DataRepository(), AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMainPresenter = new MainPresenter(this,mDataRepository , AndroidSchedulers.mainThread());
     }
 
     @Override
